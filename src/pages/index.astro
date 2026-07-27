@@ -1,0 +1,361 @@
+---
+// ✦ Maestro Edil Carpi - Pagina Principale (SSG) ✦
+// Performance & SEO ottimizzati per posizionamento su costruzioni/ristrutturazioni
+// in provincia di Modena e Reggio Emilia
+import '../styles/global.css';
+import App from '../components/App.tsx';
+import CookieConsent from '../components/CookieConsent.astro';
+import { cities } from '../data/cities';
+
+// ── Estrai città da cities.ts (SINGLE SOURCE OF TRUTH) ──
+const cittaMO = cities.filter(c => c.province === 'MO').map(c => c.name);
+const cittaRE = cities.filter(c => c.province === 'RE').map(c => c.name);
+
+// ── Tutte le città servite (unione MO + RE) ──
+const cittaServite = [...cittaMO, ...cittaRE];
+const provinceDesc = `Modena (${cittaMO.join(', ')}) e Reggio Emilia (${cittaRE.join(', ')})`;
+
+// ── Genera dynamic keywords from cities.ts data ──
+const cittaKeywords = [
+  ...cittaMO.map(c => `impresa edile ${c}`),
+  ...cittaMO.map(c => `ristrutturazione ${c}`),
+  ...cittaRE.map(c => `impresa edile ${c}`),
+  ...cittaRE.map(c => `ristrutturazione ${c}`),
+];
+
+// ── Keyword stratificate per tutti i servizi (piccoli → grandi) ──
+const keywords = [
+  // Impresa edile generico
+  "impresa edile Carpi", "impresa edile Modena", "impresa edile Reggio Emilia",
+  "impresa edile Emilia-Romagna", "impresa di costruzioni Modena e Reggio Emilia",
+  "costruzioni Modena", "costruzioni Reggio Emilia", "edilizia Carpi",
+  "costruzioni Emilia-Romagna", "ditta edile Carpi", "ditta edile Modena",
+  "azienda edile Reggio Emilia", "lavori edili Carpi", "lavori edili Modena",
+  "lavori edili Reggio Emilia",
+
+  // Ristrutturazioni
+  "ristrutturazione casa Modena", "ristrutturazione appartamento Reggio Emilia",
+  "ristrutturazione villa Carpi", "ristrutturazione chiavi in mano Modena",
+  "ristrutturazione chiavi in mano Reggio Emilia", "ristrutturazione completa Carpi",
+  "ristrutturazione appartamento Modena", "ristrutturazione villa Modena",
+  "ristrutturazione casa Reggio Emilia", "ristrutturazione budget Modena",
+  "ristrutturazione bagno Carpi", "ristrutturazione cucina Modena",
+  "ristrutturazione bagno Modena", "ristrutturazione cucina Reggio Emilia",
+  "ristrutturazione bagno Reggio Emilia", "ristrutturazione cucina Carpi",
+  "ristrutturazione locale commerciale Modena", "ristrutturazione ufficio Reggio Emilia",
+
+  // Costruzioni
+  "costruzione casa Reggio Emilia", "costruzione villetta Reggio Emilia",
+  "costruzione casa Modena", "costruzione villetta Modena",
+  "costruzione edificio Carpi", "costruzione palazzina Modena",
+  "nuova costruzione Reggio Emilia", "edilizia residenziale Modena",
+  "edilizia residenziale Reggio Emilia", "costruzioni residenziali Carpi",
+
+  // Ampliamenti e sopraelevazioni
+  "ampliamento edificio Carpi", "sopraelevazione Modena",
+  "ampliamento casa Modena", "ampliamento villa Reggio Emilia",
+  "sopraelevazione Reggio Emilia", "ampliamento appartamento Carpi",
+
+  // Restauro
+  "restauro edificio storico Carpi", "restauro palazzo antico Modena",
+  "recupero immobile Reggio Emilia", "restauro conservativo Modena",
+  "restauro affreschi Reggio Emilia", "restauro facciate Carpi",
+  "restauro edifici storici Modena", "recupero edilizio Reggio Emilia",
+  "restauro monumenti Carpi", "patrimonio edilizio Modena",
+
+  // Pavimenti e rivestimenti
+  "pavimenti Modena", "rivestimenti Reggio Emilia", "posa piastrelle Carpi",
+  "posa gres porcellanato Modena", "posa ceramica Reggio Emilia",
+  "pavimentazione Carpi", "pavimento in gres Modena",
+  "rivestimento pareti Reggio Emilia", "posa marmo Carpi",
+  "posa pietra Modena", "pavimento legno Reggio Emilia",
+  "sostituzione pavimento Modena", "rifacimento pavimento Carpi",
+  "rivestimento bagno Carpi", "rivestimento cucina Modena",
+
+  // Bagni e cucine
+  "ristrutturazione bagno completo Modena", "ristrutturazione cucina completa Reggio Emilia",
+  "bagno moderno Carpi", "cucina design Modena",
+  "installazione sanitari Reggio Emilia", "posa rivestimenti bagno Carpi",
+  "arredo bagno Reggio Emilia",
+
+  // Cartongesso e controsoffitti
+  "cartongesso Reggio Emilia", "controsoffitti Carpi",
+  "parete cartongesso Modena", "controparete Reggio Emilia",
+  "controsoffitto LED Carpi", "controsoffitto apribile Modena",
+  "nicchie cartongesso Reggio Emilia", "pareti attrezzate Modena",
+
+  // Tinteggiatura e finiture
+  "tinteggiatura Modena", "stucco veneziano Reggio Emilia",
+  "rasatura pareti Carpi", "pittura interna Reggio Emilia",
+  "finiture decorative Carpi",
+
+  // Consulenza e progettazione
+  "consulenza progettazione edile Carpi", "progettazione architettonica Modena",
+  "direzione lavori Reggio Emilia", "perizia tecnica Carpi",
+  "pratiche edilizie Modena", "computo metrico Reggio Emilia",
+  "sicurezza cantieri Carpi", "progetto edilizio Modena",
+
+  // Efficientamento energetico
+  "efficientamento energetico Carpi", "cappotto termico Modena",
+  "isolamento termico Reggio Emilia", "isolamento acustico Carpi",
+  "ristrutturazione energetica Modena", "bonus edilizi Reggio Emilia",
+  "risparmio energetico Carpi",
+
+  // Piccoli lavori e manutenzione
+  "idraulico Carpi", "manutenzione casa Reggio Emilia",
+  "montaggio mobili Carpi", "riparazioni murarie Modena",
+  "piccoli lavori edili Reggio Emilia", "installazione sanitari Carpi",
+  "sostituzione rubinetti Modena", "riparazione infissi Carpi",
+  "montaggio porte Modena", "riparazione tetto Carpi",
+  "montaggio TV a parete Carpi", "montaggio tende Modena",
+  "riparazione serramenti Carpi",
+
+  // Zona generica e long-tail
+  "impresa edile vicino a me Modena", "impresa edile vicino a me Reggio Emilia",
+  "miglior impresa edile Carpi", "miglior ristrutturatore Modena",
+  "costo ristrutturazione bagno Modena", "costo ristrutturazione cucina Reggio Emilia",
+  "preventivo ristrutturazione Carpi", "preventivo gratuito edile Modena",
+  "ristrutturazione economica Reggio Emilia", "lavori edili prezzi Carpi",
+  "manutenzione edilizia Modena",
+  ...cittaKeywords,
+].join(", ");
+
+const SITE = 'https://www.maestroedilcarpi.it';
+const BASE = '';
+const BASE_URL = SITE;
+---
+
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Preconnect per performance font e third-party -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Preload font critici -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&family=Raleway:wght@300;400;500;600;700&display=swap" as="style" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&family=Raleway:wght@300;400;500;600;700&display=swap" media="print" onload="this.media='all'" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href={`${BASE}/favicon.svg`} />
+    <link rel="icon" href={`${BASE}/favicon.ico`} sizes="any" />
+    <link rel="apple-touch-icon" href={`${BASE}/favicon.svg`} />
+
+    <!-- SEO Meta Tags — ottimizzate per posizionamento Top 1 -->
+    <title>Impresa Edile a Carpi, Modena e Reggio Emilia | Maestro Edil Carpi</title>
+    <meta name="description" content="Maestro Edil Carpi: impresa edile a Carpi dal 1985. Ristrutturazioni chiavi in mano, costruzioni, pavimenti, bagni, cucine e restauro. 40+ anni di esperienza. Preventivo gratuito!" />
+    <meta name="author" content="Maestro Edil Carpi" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <meta name="geo.region" content="IT-MO" />
+    <meta name="geo.placename" content="Carpi" />
+    <meta name="geo.position" content="44.7308;10.8836" />
+    <meta name="ICBM" content="44.7308, 10.8836" />
+    <link rel="canonical" href={`${BASE_URL}/`} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Maestro Edil Carpi - Impresa Edile Carpi, Modena e Reggio Emilia" />
+    <meta property="og:description" content="Dal 1985 realizziamo costruzioni, ristrutturazioni e restauri in tutta la provincia di Modena e Reggio Emilia. Preventivo gratuito!" />
+    <meta property="og:url" content={`${BASE_URL}/`} />
+    <meta property="og:locale" content="it_IT" />
+    <meta property="og:site_name" content="Maestro Edil Carpi" />
+    <meta property="og:image" content={`${BASE_URL}/vuad/cs.png`} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Maestro Edil Carpi - Impresa edile a Carpi, Modena e Reggio Emilia" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Maestro Edil Carpi - Impresa Edile in Emilia-Romagna" />
+    <meta name="twitter:description" content="Costruzioni, ristrutturazioni e restauro a Carpi, Modena e Reggio Emilia. Dal 1985." />
+    <meta name="twitter:image" content={`${BASE_URL}/vuad/cs.png`} />
+    <meta name="twitter:image:alt" content="Maestro Edil Carpi - Impresa edile" />
+
+    <!-- Theme color per mobile browser -->
+    <meta name="theme-color" content="#0c0b09" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <!-- Structured Data — LocalBusiness (NO fake address/rating/VAT) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": "https://www.maestroedilcarpi.it/#business",
+        "name": "Maestro Edil Carpi",
+        "description": "Impresa edile specializzata in costruzioni, ristrutturazioni complete, pavimenti e rivestimenti, bagni e cucine, cartongesso e controsoffitti, tinteggiatura e finiture, consulenza progettazione, restauro edifici storici, piccoli lavori e manutenzione nelle province di Modena e Reggio Emilia.",
+        "url": "https://www.maestroedilcarpi.it/",
+        "telephone": "+39 375 542 8696",
+        "email": "info@maestroedilcarpi.it",
+        "foundingDate": "1985",
+        "priceRange": "€€",
+        "image": "https://www.maestroedilcarpi.it/vuad/cs.png",
+        "currenciesAccepted": "EUR",
+        "paymentAccepted": ["Bonifico bancario", "Contanti"],
+        "areaServed": [
+          { "@type": "City", "name": "Carpi", "sameAs": "https://it.wikipedia.org/wiki/Carpi" },
+          { "@type": "City", "name": "Modena", "sameAs": "https://it.wikipedia.org/wiki/Modena" },
+          { "@type": "City", "name": "Reggio nell'Emilia", "sameAs": "https://it.wikipedia.org/wiki/Reggio_nell%27Emilia" },
+          { "@type": "AdministrativeArea", "name": "Provincia di Modena", "sameAs": "https://it.wikipedia.org/wiki/Provincia_di_Modena" },
+          { "@type": "AdministrativeArea", "name": "Provincia di Reggio Emilia", "sameAs": "https://it.wikipedia.org/wiki/Provincia_di_Reggio_Emilia" },
+          { "@type": "State", "name": "Emilia-Romagna", "sameAs": "https://it.wikipedia.org/wiki/Emilia-Romagna" }
+        ],
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Carpi",
+          "addressRegion": "MO",
+          "postalCode": "41012",
+          "addressCountry": "IT"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 44.7308,
+          "longitude": 10.8836
+        },
+        "contactPoint": [
+          {
+            "@type": "ContactPoint",
+            "telephone": "+39 375 542 8696",
+            "contactType": "customer service",
+            "availableLanguage": ["Italiano"],
+            "areaServed": ["IT-MO", "IT-RE"]
+          }
+        ],
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+            "opens": "08:00",
+            "closes": "18:00"
+          },
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": "Saturday",
+            "opens": "08:00",
+            "closes": "13:00"
+          }
+        ],
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Servizi Edili",
+          "itemListElement": [
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Pavimenti e Rivestimenti", "description": "Posa e sostituzione di pavimenti, piastrelle, rivestimenti murali e ceramiche a Carpi, Modena e Reggio Emilia." } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Ristrutturazione Completa", "description": "Ristrutturazioni chiavi in mano di appartamenti, ville e uffici in provincia di Modena e Reggio Emilia." } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Bagni e Cucine", "description": "Progettazione e ristrutturazione di bagni e cucine con materiali di alta qualità." } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Cartongesso e Controsoffitti", "description": "Realizzazione di pareti in cartongesso, contropareti e controsoffitti moderni." } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Tinteggiatura e Finiture", "description": "Tinteggiatura interna professionale, stucco veneziano, rasature e finiture decorative." } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Consulenza e Progettazione", "description": "Supporto tecnico dall'ideazione alla realizzazione del tuo progetto edile." } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Piccoli Lavori e Manutenzione", "description": "Riparazioni, montaggio arredi e manutenzione ordinaria nelle province di Modena e Reggio Emilia." } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Costruzione Nuovi Edifici", "description": "Costruzione di ville, palazzine e edifici commerciali nel territorio emiliano." } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Restauro Edifici Storici", "description": "Restauro conservativo e recupero di edifici storici e palazzi antichi." } }
+          ]
+        }
+      }
+    </script>
+
+    <!-- FAQ Structured Data per featured snippet -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Dove operate come impresa edile?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Operiamo in tutta la provincia di Modena (${cittaMO.length} comuni: ${cittaMO.slice(0, 8).join(', ')} e altri) e in tutta la provincia di Reggio Emilia (${cittaRE.length} comuni: ${cittaRE.slice(0, 8).join(', ')} e altri)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Quali servizi offrite come impresa edile?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Offriamo una gamma completa di servizi edili: ristrutturazioni complete chiavi in mano, pavimenti e rivestimenti, bagni e cucine, cartongesso e controsoffitti, tinteggiatura e finiture decorative, consulenza e progettazione edile, restauro edifici storici, costruzione nuovi edifici, ampliamenti, sopraelevazioni, efficientamento energetico, cappotto termico, e piccoli lavori di manutenzione."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Quanto costa una ristrutturazione completa?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "I costi di ristrutturazione variano in base alla tipologia, dimensione e complessità dei lavori. Offriamo preventivi gratuiti e personalizzati per ogni intervento, dalla piccola manutenzione alla ristrutturazione completa chiavi in mano. Contattaci per una consulenza tecnica preliminare senza impegno."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Da quanto siete in attività nel settore edile?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Siamo operativi dal 1985, con oltre 40 anni di esperienza nel settore edile in Emilia-Romagna. Abbiamo realizzato centinaia di progetti, dalle ristrutturazioni residenziali alla costruzione di nuovi edifici."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Offrite preventivi gratuiti per lavori edili?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Sì, offriamo preventivi gratuiti e senza impegno per tutti i nostri servizi edili. Contattaci via telefono al +39 375 542 8696, via WhatsApp, oppure compilando il modulo di contatto sul nostro sito web."
+            }
+          }
+        ]
+      }
+    </script>
+
+    <!-- BreadcrumbList Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.maestroedilcarpi.it/" },
+          { "@type": "ListItem", "position": 2, "name": "Servizi Edili", "item": "https://www.maestroedilcarpi.it/#servizi" },
+          { "@type": "ListItem", "position": 3, "name": "Contatti", "item": "https://www.maestroedilcarpi.it/#contatti" }
+        ]
+      }
+    </script>
+
+    <!-- WebSite structured data + SearchAction -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "@id": "https://www.maestroedilcarpi.it/#website",
+        "url": "https://www.maestroedilcarpi.it/",
+        "name": "Maestro Edil Carpi",
+        "description": "Impresa edile a Carpi, Modena e Reggio Emilia specializzata in costruzioni, ristrutturazioni e restauro.",
+        "inLanguage": "it-IT",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://www.maestroedilcarpi.it/cerca?q={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
+
+    <!-- Google Analytics — loaded ONLY after user consent via CookieConsent component -->
+
+    <!-- CSS inline critico per First Paint -->
+    <style>
+      *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}body{background:#0c0b09;color:#ede9df;font-family:'Raleway',system-ui,sans-serif;-webkit-font-smoothing:antialiased}html{scroll-behavior:smooth;font-size:18px}
+    </style>
+  </head>
+
+  <body class="bg-background text-foreground antialiased">
+    <!-- Google Tag Manager (noscript) — sblocca quando avrai il dominio -->
+    <!-- <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> -->
+    
+    <App client:visible />
+
+    <!-- Cookie Consent Banner -->
+    <CookieConsent />
+  </body>
+</html>

@@ -1,0 +1,342 @@
+---
+import LightLayout from '../../layouts/LightLayout.astro';
+import { blogArticles } from '../../data/blog';
+
+const BASE = '';
+const SITE = 'https://www.maestroedilcarpi.it';
+---
+
+<LightLayout
+  title="Blog | Maestro Edil Carpi — Guide, Prezzi e Consigli"
+  description="Articoli, guide e consigli su ristrutturazione, pavimenti, bagni e cucine a Carpi, Modena e Reggio Emilia. Prezzi 2026 e informazioni utili."
+  canonical="https://www.maestroedilcarpi.it/blog/"
+>
+  <div class="blog-page">
+    <div class="blog-page-inner">
+      <!-- Breadcrumb -->
+      <nav aria-label="Breadcrumb" class="blog-breadcrumb">
+        <a href={`${BASE}/`}>Home</a>
+        <span class="blog-breadcrumb-sep">/</span>
+        <span class="blog-breadcrumb-current">Guide & Prezzi</span>
+      </nav>
+
+      <!-- Hero header -->
+      <header class="blog-hero">
+        <span class="blog-eyebrow">Risorse & Approfondimenti</span>
+        <h1 class="blog-title">Blog — Guide e Prezzi</h1>
+        <p class="blog-lede">
+          Articoli informativi su costi, materiali e consigli utili per la tua ristrutturazione
+          a Carpi, Modena e provincia. Tutti i prezzi sono aggiornati al 2026.
+        </p>
+      </header>
+
+      <!-- Articles grid -->
+      <div class="blog-grid">
+        {blogArticles.map(article => (
+          <a href={`${BASE}/blog/${article.slug}/`} class="blog-card">
+            <div class="blog-card-image">
+              {article.image ? (
+                <img
+                  src={article.image}
+                  alt={article.imageAlt}
+                  loading="lazy"
+                  decoding="async"
+                  width="800"
+                  height="500"
+                />
+              ) : (
+                <div class="blog-card-image-placeholder" aria-hidden="true"></div>
+              )}
+              <span class="blog-card-image-text">{article.category}</span>
+            </div>
+            <div class="blog-card-body">
+              <span class="blog-card-tag">{article.category}</span>
+              <h2 class="blog-card-title">{article.title}</h2>
+              <p class="blog-card-excerpt">{article.excerpt}</p>
+              <div class="blog-card-meta">
+                <span>{article.date}</span>
+                <span class="blog-card-meta-sep">·</span>
+                <span>{article.readTime} di lettura</span>
+              </div>
+              <span class="blog-card-cta">Leggi l'articolo <span class="blog-card-arrow">→</span></span>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <!-- Bottom CTA -->
+      <div class="blog-cta">
+        <div class="blog-cta-inner">
+          <h2>Hai un progetto in mente?</h2>
+          <p>
+            Contattaci per un sopralluogo gratuito e un preventivo personalizzato
+            senza impegno. Rispondiamo entro 24 ore.
+          </p>
+          <a href={`${BASE}/#contatti`} class="cta-btn">Richiedi Preventivo</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</LightLayout>
+
+<style>
+  /* ============== Blog Page Container ============== */
+  .blog-page {
+    background: #f9f8f6;
+    width: 100vw;
+    max-width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-top: -6rem;
+    margin-bottom: -4rem;
+    padding-top: 7rem;
+    padding-bottom: 5rem;
+    overflow-x: hidden;
+  }
+  .blog-page-inner {
+    max-width: 76rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* ============== Breadcrumb ============== */
+  .blog-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Raleway', system-ui, sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #56626D;
+    margin-bottom: 2.5rem;
+  }
+  .blog-breadcrumb a {
+    color: #56626D;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .blog-breadcrumb a:hover { color: #1A1A1A; }
+  .blog-breadcrumb-sep { color: #C5A880; }
+  .blog-breadcrumb-current { color: #1A1A1A; font-weight: 600; }
+
+  /* ============== Hero ============== */
+  .blog-hero {
+    margin-bottom: 4rem;
+    max-width: 720px;
+  }
+  .blog-eyebrow {
+    display: inline-block;
+    font-family: 'Raleway', system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #C5A880;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #C5A880;
+  }
+  .blog-title {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+    font-weight: 700;
+    color: #1A1A1A;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.25rem;
+  }
+  .blog-lede {
+    color: #56626D;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    max-width: 620px;
+  }
+
+  /* ============== Cards Grid ============== */
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-bottom: 5rem;
+  }
+  @media (max-width: 768px) {
+    .blog-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+  }
+
+  .blog-card {
+    display: flex;
+    flex-direction: column;
+    background: #FFFFFF;
+    border: 1px solid rgba(26, 26, 26, 0.05);
+    border-radius: 6px;
+    text-decoration: none;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.35s ease, border-color 0.25s ease;
+  }
+  .blog-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+    border-color: rgba(197, 168, 128, 0.4);
+  }
+
+  /* Card image with category overlay */
+  .blog-card-image {
+    position: relative;
+    height: 240px;
+    background: #f3f0ea;
+    border-bottom: 1px solid rgba(26, 26, 26, 0.06);
+    overflow: hidden;
+  }
+  .blog-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .blog-card:hover .blog-card-image img {
+    transform: scale(1.05);
+  }
+  .blog-card-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(0, 0, 0, 0.45) 100%);
+    pointer-events: none;
+  }
+  .blog-card-image-placeholder {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(135deg, rgba(197, 168, 128, 0.18) 0%, rgba(26, 26, 26, 0.06) 100%),
+      linear-gradient(45deg, #f3f0ea 25%, transparent 25%, transparent 75%, #f3f0ea 75%),
+      linear-gradient(45deg, #f3f0ea 25%, transparent 25%, transparent 75%, #f3f0ea 75%);
+    background-size: auto, 24px 24px, 24px 24px;
+    background-position: 0 0, 0 0, 12px 12px;
+  }
+  .blog-card-image-text {
+    position: absolute;
+    bottom: 1.25rem;
+    left: 1.25rem;
+    font-family: 'Raleway', system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    z-index: 1;
+  }
+
+  .blog-card-body {
+    padding: 1.75rem 1.75rem 2rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .blog-card-tag {
+    display: inline-block;
+    align-self: flex-start;
+    font-family: 'Raleway', system-ui, sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    background: #1A1A1A;
+    padding: 0.35rem 0.7rem;
+    border-radius: 2px;
+    margin-bottom: 1rem;
+  }
+
+  .blog-card-title {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 1.45rem;
+    font-weight: 600;
+    color: #1A1A1A;
+    line-height: 1.25;
+    margin-bottom: 0.85rem;
+    letter-spacing: -0.005em;
+  }
+
+  .blog-card-excerpt {
+    font-size: 0.9rem;
+    color: #56626D;
+    line-height: 1.65;
+    margin-bottom: 1.5rem;
+    flex: 1;
+  }
+
+  .blog-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: 'Raleway', system-ui, sans-serif;
+    font-size: 0.75rem;
+    color: #56626D;
+    margin-bottom: 1.25rem;
+    letter-spacing: 0.02em;
+  }
+  .blog-card-meta-sep { color: #C5A880; }
+
+  .blog-card-cta {
+    font-family: 'Raleway', system-ui, sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #1A1A1A;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(26, 26, 26, 0.08);
+  }
+  .blog-card-arrow {
+    display: inline-block;
+    transition: transform 0.3s ease;
+    color: #C5A880;
+    font-weight: 600;
+  }
+  .blog-card:hover .blog-card-arrow { transform: translateX(6px); }
+
+  /* ============== Bottom CTA ============== */
+  .blog-cta {
+    background: #1A1A1A;
+    border-radius: 8px;
+    padding: 3.5rem 2rem;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(26, 26, 26, 0.08);
+  }
+  .blog-cta-inner {
+    max-width: 560px;
+    margin: 0 auto;
+  }
+  .blog-cta h2 {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 600;
+    color: #FFFFFF;
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+  }
+  .blog-cta p {
+    color: #C5A880;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+  .blog-cta .cta-btn {
+    background: #C5A880;
+    color: #1A1A1A;
+    border: none;
+    padding: 1.1rem 2.4rem;
+    font-weight: 700;
+  }
+  .blog-cta .cta-btn:hover { background: #d4b890; }
+</style>

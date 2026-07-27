@@ -1,0 +1,17 @@
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = false
+	logallrefupdates = true
+	symlinks = false
+	ignorecase = true
+[remote "origin"]
+	url = https://github.com/aurking7-maker/mec.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[user]
+	email = aurking7-maker@users.noreply.github.com
+	name = aurking7-maker
+[branch "main"]
+	remote = origin
+	merge = refs/heads/main
+	vscode-merge-base = origin/main

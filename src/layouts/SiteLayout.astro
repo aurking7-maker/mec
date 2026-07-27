@@ -1,0 +1,228 @@
+---
+import CookieConsent from '../components/CookieConsent.astro';
+// Pure Astro layout — no React, no hydration issues, exact same styling as homepage
+interface Props {
+  title: string;
+  description: string;
+  canonical: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  noindex?: boolean;
+}
+
+const { title, description, canonical, ogTitle, ogDescription, ogImage, noindex } = Astro.props;
+const ogImageUrl = ogImage || 'https://www.maestroedilcarpi.it/vuad/cs.png';
+const BASE = '';
+const currentYear = new Date().getFullYear();
+---
+
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content={noindex ? "noindex, follow" : "index, follow, max-image-preview:large, max-snippet:-1"} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={ogTitle || title} />
+    <meta property="og:description" content={ogDescription || description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="it_IT" />
+    <meta property="og:site_name" content="Maestro Edil Carpi" />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogTitle || title} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={ogTitle || title} />
+    <meta name="twitter:description" content={ogDescription || description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="theme-color" content="#0c0b09" />
+    <link rel="icon" type="image/svg+xml" href={`${BASE}/favicon.svg`} />
+    <link rel="icon" href={`${BASE}/favicon.ico`} sizes="any" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="alternate" hreflang="it" href={canonical} />
+    <link rel="alternate" hreflang="x-default" href={canonical} />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&family=Raleway:wght@300;400;500;600;700&display=swap" as="style" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&family=Raleway:wght@300;400;500;600;700&display=swap" media="print" onload="this.media='all'" />
+
+    <!-- Google Analytics — loaded ONLY after user consent via CookieConsent component -->
+
+    <slot name="head" />
+    <style is:global>
+      *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+      body{background:#0c0b09;color:#ede9df;font-family:'Raleway',system-ui,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.7;font-size:18px;display:flex;flex-direction:column;min-height:100vh;overflow-x:hidden}
+      main{flex:1}
+      a{color:#c8a96e;text-decoration:none;transition:opacity .2s}a:hover{opacity:.8}
+
+      /* Navbar */
+      .nav{position:fixed;top:0;left:0;right:0;z-index:50;transition:all .5s;background:rgba(20,18,16,0.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(200,169,110,0.13)}
+      .nav-inner{max-width:80rem;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:5rem}
+      .nav-logo{display:flex;align-items:center;gap:.75rem;cursor:pointer;background:none;border:none}
+      .nav-logo-text{font-family:'Raleway',system-ui,sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#ede9df;line-height:1.2}
+      .nav-logo-sub{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:#c8a96e;font-weight:300;line-height:1.2}
+      .nav-links{display:flex;align-items:center;gap:2rem;list-style:none}
+      .nav-links a{font-family:'Raleway',system-ui,sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#d3c6af;text-decoration:none;transition:color .2s;background:none;border:none;cursor:pointer}
+      .nav-links a:hover{color:#ede9df}
+      .nav-cta{padding:.625rem 1.25rem;border:1px solid #c8a96e;color:#c8a96e;font-family:'Raleway',system-ui,sans-serif;font-size:10px;letter-spacing:.25em;text-transform:uppercase;text-decoration:none;transition:all .3s;background:none;cursor:pointer}
+      .nav-cta:hover{background:#c8a96e;color:#0c0b09}
+
+      /* Footer */
+      .footer{background:#0c0b09;border-top:1px solid rgba(200,169,110,.1);padding:3.5rem 0}
+      .footer-inner{max-width:80rem;margin:0 auto;padding:0 1.5rem}
+      .footer-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:2.5rem;margin-bottom:3rem}
+      @media(max-width:1024px){.footer-grid{grid-template-columns:1fr 1fr;gap:2rem}}
+      @media(max-width:640px){.footer-grid{grid-template-columns:1fr;gap:2rem}}
+      .footer-brand p{color:#d3c6af;font-size:12px;font-weight:300;line-height:1.7}
+      .footer-brand-tag{display:flex;align-items:center;gap:.5rem;margin-top:1.25rem}
+      .footer-brand-line{width:1rem;height:1px;background:rgba(200,169,110,.5)}
+      .footer-brand-location{font-family:'Raleway',system-ui,sans-serif;font-size:10px;letter-spacing:.3em;color:#d3c6af}
+      .footer-col h3{font-family:'Raleway',system-ui,sans-serif;font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:#ede9df;margin-bottom:1.25rem}
+      .footer-col ul{list-style:none;padding:0;margin:0}
+      .footer-col li{margin-bottom:.625rem}
+      .footer-col a{font-family:'Raleway',system-ui,sans-serif;font-size:12px;font-weight:300;color:#d3c6af;text-decoration:none;transition:color .2s}
+      .footer-col a:hover{color:#c8a96e}
+      .footer-bottom{border-top:1px solid rgba(200,169,110,.1);padding-top:1.5rem;display:flex;flex-direction:column;align-items:center;gap:1rem}
+      .footer-copy{font-family:'Raleway',system-ui,sans-serif;font-size:12px;font-weight:300;color:#d3c6af;text-align:center}
+      .footer-legal{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center}
+      .footer-legal a{font-family:'Raleway',system-ui,sans-serif;font-size:12px;font-weight:300;color:#d3c6af;text-decoration:none;transition:color .2s}
+      .footer-legal a:hover{color:#c8a96e}
+      .footer-credit{font-family:'Raleway',system-ui,sans-serif;font-size:11px;font-weight:400;color:#d3c6af;margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(200,169,110,.05);text-align:center}
+      .footer-credit a{color:#c8a96e;text-decoration:none}
+
+      /* Content */
+      .content{max-width:80rem;margin:0 auto;padding:6rem 1.5rem 4rem}
+      .content h1{font-family:'EB Garamond',Georgia,serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:600;margin-bottom:1rem;line-height:1.15;color:#ede9df}
+      .content h2{font-family:'EB Garamond',Georgia,serif;font-size:clamp(1.4rem,3vw,2rem);font-weight:600;margin:2.5rem 0 1rem;color:#c8a96e}
+      .content h3{font-family:'EB Garamond',Georgia,serif;font-size:1.2rem;font-weight:600;margin:1.5rem 0 .5rem;color:#ede9df}
+      .content p{margin-bottom:1.2rem;color:#d3c6af;font-size:.95rem;line-height:1.7}
+      .content strong{color:#ede9df}
+      .content ul{list-style:none;padding:0;margin:0 0 1.5rem}
+      .content li{padding:.5rem 0;border-bottom:1px solid rgba(200,169,110,.1);color:#d3c6af;font-size:.9rem}
+      .content li::before{content:'✓ ';color:#c8a96e;font-weight:700}
+      .cta-btn{display:inline-block;padding:1rem 2rem;background:#c8a96e;color:#0c0b09;font-family:'Raleway',system-ui,sans-serif;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;transition:opacity .3s;margin-top:1rem}
+      .cta-btn:hover{opacity:.85}
+      .nearby{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.5rem}
+      .nearby a{display:inline-block;padding:.4rem .8rem;border:1px solid rgba(200,169,110,.2);font-size:.8rem;color:#d3c6af;text-decoration:none;transition:all .2s}
+      .nearby a:hover{border-color:#c8a96e;color:#c8a96e}
+      .service-link{display:block;padding:1.2rem;border:1px solid rgba(200,169,110,.1);margin-bottom:.8rem;transition:all .2s;text-decoration:none}
+      .service-link:hover{border-color:rgba(200,169,110,.3);background:rgba(20,18,16,.5)}
+      .service-link h3{font-size:1.1rem;margin:0;color:#ede9df}
+      .city-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.6rem;margin:1.5rem 0}
+      .city-grid a{display:block;padding:1rem;border:1px solid rgba(200,169,110,.1);transition:all .2s;font-size:.85rem;color:#d3c6af;text-decoration:none}
+      .city-grid a:hover{border-color:rgba(200,169,110,.3);color:#c8a96e;background:rgba(20,18,16,.5)}
+    </style>
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <header class="nav" role="banner">
+      <nav class="nav-inner" aria-label="Navigazione principale">
+        <a href={`${BASE}/`} class="nav-logo" aria-label="Maestro Edil Carpi - Home">
+          <svg viewBox="0 0 40 40" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="flex-shrink:0">
+            <rect x="1" y="1" width="38" height="38" rx="4" stroke="#c8a96e" stroke-width="1.1" fill="none"/>
+            <path d="M 10 32 L 10 12 L 14 12 L 14 32" stroke="#c8a96e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M 26 32 L 26 12 L 30 12 L 30 32" stroke="#c8a96e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M 12 12 L 20 6" stroke="#c8a96e" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+            <path d="M 28 12 L 20 6" stroke="#c8a96e" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+            <path d="M 10 18 L 30 18" stroke="#c8a96e" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+            <path d="M 20 3 L 22 6 L 20 9 L 18 6 Z" fill="#c8a96e"/>
+          </svg>
+          <div>
+            <div class="nav-logo-text">Maestro Edil</div>
+            <div class="nav-logo-sub">Carpi</div>
+          </div>
+        </a>
+        <ul class="nav-links">
+          <li><a href={`${BASE}/`}>Home</a></li>
+          <li><a href={`${BASE}/#servizi`}>Servizi</a></li>
+          <li><a href={`${BASE}/#opere`}>Opere</a></li>
+          <li><a href={`${BASE}/blog/`}>Guide & Costi</a></li>
+          <li><a href={`${BASE}/#contatti`}>Contatti</a></li>
+        </ul>
+        <a href={`${BASE}/#contatti`} class="nav-cta">Preventivo</a>
+      </nav>
+    </header>
+
+    <!-- CONTENT -->
+    <main class="content">
+      <slot />
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer" role="contentinfo">
+      <div class="footer-inner">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem">
+              <svg viewBox="0 0 40 40" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <rect x="1" y="1" width="38" height="38" rx="4" stroke="#c8a96e" stroke-width="1.1" fill="none"/>
+                <path d="M 10 32 L 10 12 L 14 12 L 14 32" stroke="#c8a96e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                <path d="M 26 32 L 26 12 L 30 12 L 30 32" stroke="#c8a96e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                <path d="M 12 12 L 20 6" stroke="#c8a96e" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+                <path d="M 28 12 L 20 6" stroke="#c8a96e" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+                <path d="M 10 18 L 30 18" stroke="#c8a96e" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+                <path d="M 20 3 L 22 6 L 20 9 L 18 6 Z" fill="#c8a96e"/>
+              </svg>
+              <div class="nav-logo-text">Maestro Edil Carpi</div>
+            </div>
+            <p>Costruiamo eccellenza dal 1985 nel territorio emiliano.</p>
+            <div class="footer-brand-tag">
+              <div class="footer-brand-line"></div>
+              <span class="footer-brand-location">Carpi, MO</span>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h3>Servizi</h3>
+            <ul>
+              <li><a href={`${BASE}/servizi-e-citta/`}>Tutti i Servizi & Città</a></li>
+              <li><a href={`${BASE}/servizi/pavimenti-e-rivestimenti/`}>Pavimenti & Rivestimenti</a></li>
+              <li><a href={`${BASE}/servizi/ristrutturazione-completa/`}>Ristrutturazione Completa</a></li>
+              <li><a href={`${BASE}/servizi/bagni-e-cucine/`}>Bagni & Cucine</a></li>
+              <li><a href={`${BASE}/servizi/consulenza-e-progettazione/`}>Progettazione</a></li>
+              <li><a href={`${BASE}/servizi/cartongesso-e-controsoffitti/`}>Cartongesso & Controsoffitti</a></li>
+              <li><a href={`${BASE}/servizi/tinteggiatura-e-finiture/`}>Tinteggiatura & Finiture</a></li>
+              <li><a href={`${BASE}/servizi/piccoli-lavori-e-manutenzione/`}>Piccoli Lavori & Manutenzione</a></li>
+              <li><a href={`${BASE}/servizi/costruzione-nuovi-edifici/`}>Costruzione Nuovi Edifici</a></li>
+              <li><a href={`${BASE}/servizi/restauro-edifici-storici/`}>Restauro Edifici Storici</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h3>Azienda</h3>
+            <ul>
+              <li><a href={`${BASE}/`}>Home</a></li>
+              <li><a href={`${BASE}/#chi-siamo`}>Chi Siamo</a></li>
+              <li><a href={`${BASE}/#opere`}>Le Nostre Opere</a></li>
+              <li><a href={`${BASE}/blog/`}>Guide & Costi</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h3>Città</h3>
+            <ul>
+              <li><a href={`${BASE}/citta/carpi/`}>Carpi</a></li>
+              <li><a href={`${BASE}/citta/modena/`}>Modena</a></li>
+              <li><a href={`${BASE}/citta/reggio-nell-emilia/`}>Reggio Emilia</a></li>
+              <li><a href={`${BASE}/citta/sassuolo/`}>Sassuolo</a></li>
+              <li><a href={`${BASE}/citta/vignola/`}>Vignola</a></li>
+              <li><a href={`${BASE}/citta/correggio/`}>Correggio</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <div class="footer-legal">
+            <a href={`${BASE}/privacy-policy/`}>Privacy Policy</a>
+            <a href={`${BASE}/cookie-policy/`}>Cookie Policy</a>
+          </div>
+          <p class="footer-copy">&copy; {currentYear} Maestro Edil Carpi &middot; Tutti i diritti riservati</p>
+          <p class="footer-credit">Website by <a href="https://rayman.studio" target="_blank" rel="noopener noreferrer">rayman.studio</a></p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Cookie Consent Banner — must appear before scripts -->
+    <CookieConsent />
+  </body>
+</html>

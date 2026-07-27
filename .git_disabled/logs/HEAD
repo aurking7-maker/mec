@@ -1,0 +1,14 @@
+0000000000000000000000000000000000000000 feafebf0e9218030a3817d808d41cf685c05d243 aurking7-maker <aurking7-maker@users.noreply.github.com> 1780083637 +0200	commit (initial): Initial commit: Astro site with GitHub Pages auto-deploy
+feafebf0e9218030a3817d808d41cf685c05d243 54fdadb8409b491d748fa0281d8448db307dc8f0 aurking7-maker <aurking7-maker@users.noreply.github.com> 1780083734 +0200	commit: Fix: correct BUILD_PATH to repo root
+54fdadb8409b491d748fa0281d8448db307dc8f0 e1984095b94da6c19355314eb6a06e51f7708bba aurking7-maker <aurking7-maker@users.noreply.github.com> 1780083810 +0200	commit: Switch to peaceiris GH Pages action with gh-pages branch
+e1984095b94da6c19355314eb6a06e51f7708bba afd350cca34891c9111efac6a1b0832e0e6845bd aurking7-maker <aurking7-maker@users.noreply.github.com> 1780139668 +0200	commit: updated webp
+afd350cca34891c9111efac6a1b0832e0e6845bd 022e6eb4d27b8054beeb40c660537fa7c6edcc39 aurking7-maker <aurking7-maker@users.noreply.github.com> 1780141044 +0200	commit: Fix: custom domain maestroedilcarpi.it - remove /mec/ base path, add CNAME
+022e6eb4d27b8054beeb40c660537fa7c6edcc39 1070086e05139f44b564ffe5992527893de12b90 aurking7-maker <aurking7-maker@users.noreply.github.com> 1780142464 +0200	commit: feat: Configure for GitHub Pages deployment and base path issues
+1070086e05139f44b564ffe5992527893de12b90 0792cb522f0170ebad2bf0ec3135b65de27d3eb5 aurking7-maker <aurking7-maker@users.noreply.github.com> 1780143753 +0200	commit: updated p.iva
+0792cb522f0170ebad2bf0ec3135b65de27d3eb5 2f92c9716e174ad70100eaf2617b13028cfabbab aurking7-maker <aurking7-maker@users.noreply.github.com> 1780163091 +0200	commit: updated meta
+2f92c9716e174ad70100eaf2617b13028cfabbab bbae3a00fb5b1ee635002e2bea56e9e61d145486 aurking7-maker <aurking7-maker@users.noreply.github.com> 1780163932 +0200	commit: up ga4 tag
+bbae3a00fb5b1ee635002e2bea56e9e61d145486 80bb27cd4070d2c66252e4a82c8d33a5bc09545a aurking7-maker <aurking7-maker@users.noreply.github.com> 1780164628 +0200	commit: g4
+80bb27cd4070d2c66252e4a82c8d33a5bc09545a c4cc7aa022dc77cc5a74991e15261f70ecc6ef4f aurking7-maker <aurking7-maker@users.noreply.github.com> 1780345704 +0200	commit: favicon
+c4cc7aa022dc77cc5a74991e15261f70ecc6ef4f ecfd0123fc86f289745f02f46e750d5bf06a894d aurking7-maker <aurking7-maker@users.noreply.github.com> 1780348843 +0200	commit: cookie
+ecfd0123fc86f289745f02f46e750d5bf06a894d b2ea4aa3b458651afec3a656ec5a1a6b3a84569d aurking7-maker <aurking7-maker@users.noreply.github.com> 1780671061 +0200	commit: up
+b2ea4aa3b458651afec3a656ec5a1a6b3a84569d 48894657f6e7ed0f62c3f09c69ae4e4e9d7c8773 aurking7-maker <aurking7-maker@users.noreply.github.com> 1783779901 +0200	commit: Update phone number to 3755428696

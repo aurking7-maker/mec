@@ -1,0 +1,251 @@
+---
+import LightLayout from '../../layouts/LightLayout.astro';
+import { services, type Service } from '../../data/services';
+import { cities } from '../../data/cities';
+
+export async function getStaticPaths() {
+  return services.map((service) => ({
+    params: { slug: service.slug },
+    props: { service },
+  }));
+}
+
+const { service } = Astro.props as { service: Service };
+
+const BASE = '';
+const SITE = 'https://www.maestroedilcarpi.it';
+const canonicalUrl = `${SITE}${BASE}/servizi/${service.slug}/`;
+const citiesMO = cities.filter(c => c.province === 'MO');
+const citiesRE = cities.filter(c => c.province === 'RE');
+
+// Additional SEO content per service
+const seoContent: Record<string, { intro: string; process: string[]; benefits: string[]; faq: { q: string; a: string }[] }> = {
+  "pavimenti-e-rivestimenti": {
+    intro: "La scelta del pavimento è uno degli elementi più importanti nella ristrutturazione di un immobile. A Carpi, Modena e Reggio Emilia, Maestro Edil Carpi offre un servizio completo di posa e sostituzione pavimenti, utilizzando materiali di prima qualità provenienti dal distretto ceramico di Sassuolo. Ogni lavorazione è eseguita con cura artigianale, garantendo durata nel tempo e un risultato estetico impeccabile.",
+    process: ["Consulenza tecnica e scelta del materiale", "Preparazione del sottofondo", "Posa professionale con tecniche adeguate", "Finiture e sigillatura", "Pulizia e consegna del cantiere"],
+    benefits: ["Accesso diretto ai migliori produttori ceramici del distretto di Sassuolo", "Garanzia su tutte le lavorazioni", "Materiali certificati di alta qualità", "Intervento rapido in tutta la provincia"],
+    faq: [
+      { q: "Quanto tempo impiega la posa di un pavimento in gres porcellanato?", a: "I tempi variano in base alla metratura e complessità. Per un appartamento standard di 80-100 mq, i tempi sono di circa 5-7 giorni lavorativi dalla rimozione del vecchio pavimento alla consegna." },
+      { q: "Che differenza c'è tra gres porcellanato e ceramica?", a: "Il gres porcellanato è più resistente, meno poroso e adatto anche agli spazi esterni. La ceramica è più versatile per uso interno. Entrambi i materiali sono disponibili in una vasta gamma di formati e finiture." }
+    ]
+  },
+  "ristrutturazione-completa": {
+    intro: "La ristrutturazione completa chiavi in mano è il servizio più richiesto da Maestro Edil Carpi. Gestiamo l'intero processo progettuale ed esecutivo: dalla demolizione iniziale alla consegna delle chiavi, passando per impianti, pavimenti, rivestimenti e finiture. Ogni progetto è seguito personalmente dal nostro team di professionisti con oltre 40 anni di esperienza.",
+    process: ["Sopralluogo gratuito e preventivo dettagliato", "Progettazione e pratiche edilizie (CILA, SCIA)", "Demolizione e smaltimento materiali", "Posa impianti idraulici ed elettrici", "Lavorazioni murarie e cartongesso", "Pavimenti, rivestimenti e finiture", "Collaudo e consegna chiavi in mano"],
+    benefits: ["Un unico interlocutore per tutto il progetto", "Gestione completa delle pratiche edilizie", "Rispetto delle tempistiche concordate", "Preventivo trasparente senza sorprese"],
+    faq: [
+      { q: "Quanto costa ristrutturare completely un appartamento?", a: "I costi variano in base alle dimensioni e alla qualità dei materiali scelti. Offriamo preventivi gratuiti e dettagliati che includono ogni voce di spesa, senza costi nascosti." },
+      { q: "Gestite le pratiche edilizie?", a: "Sì, ci occupiamo di tutte le pratiche amministrative: CILA, SCIA, Permesso di Costruire e ogni altra autorizzazione necessaria." }
+    ]
+  },
+  "bagni-e-cucine": {
+    intro: "Bagno e cucina sono gli ambienti più importanti della casa. Maestro Edil Carpi specializzato nella ristrutturazione completa di bagni e cucine a Carpi, Modena e Reggio Emilia, offrendo un servizio che va dalla progettazione alla realizzazione, con materiali di alta qualità e finiture impeccabili.",
+    process: ["Progettazione e consulenza design", "Demolizione e smaltimento", "Posa impianti idraulici di base", "Rivestimenti e pavimenti", "Installazione sanitari e arredi", "Finiture e dettagli"],
+    benefits: ["Design su misura per ogni esigenza", "Materiali premium dal distretto ceramico", "Sanitari di marchi leader di mercato", "Garanzia su impianti e lavorazioni"],
+    faq: [
+      { q: "Quanto tempo ci vuole per ristrutturare un bagno?", a: "La ristrutturazione completa di un bagno richiede mediamente 2-3 settimane, a seconda della complessità dei lavori e dei materiali scelti." },
+      { q: "Installate anche sanitari sospesi?", a: "Sì, siamo specializzati nell'installazione di sanitari sospesi con portarmadio integrato, una delle soluzioni più richieste per bagni moderni e funzionali." }
+    ]
+  },
+};
+
+// Default content for services without custom content
+const defaultSeo = {
+  intro: service.description,
+  process: ["Sopralluogo e consulenza tecnica gratuita", "Preventivo dettagliato e trasparente", "Esecuzione dei lavori con materiali di qualità", "Collaudo e consegna"],
+  benefits: ["Professionisti con oltre 40 anni di esperienza", "Materiali certificati e di alta qualità", "Garanzia su tutte le lavorazioni", "Preventivo gratuito e senza impegno"],
+  faq: [
+    { q: `Quanto costa ${service.title.toLowerCase()}?`, a: "I costi variano in base alla tipologia e complessità dei lavori. Contattaci per un preventivo gratuito e personalizzato." },
+    { q: `In quali aree offrite ${service.title.toLowerCase()}?`, a: "Operiamo in tutta la provincia di Modena e Reggio Emilia, intervenendo rapidamente in tutti i comuni delle due province." }
+  ]
+};
+
+const content = seoContent[service.slug] || defaultSeo;
+
+const schema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": service.title,
+  "provider": { "@type": "LocalBusiness", "name": "Maestro Edil Carpi", "url": `${SITE}${BASE}/`, "telephone": "+39 331 202 1603" },
+  "areaServed": [
+    { "@type": "AdministrativeArea", "name": "Provincia di Modena" },
+    { "@type": "AdministrativeArea", "name": "Provincia di Reggio Emilia" }
+  ],
+  "description": service.description,
+  "providerMobility": "Static",
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": service.title,
+    "itemListElement": service.features.map(f => ({
+      "@type": "Offer",
+      "itemOffered": { "@type": "Service", "name": f }
+    }))
+  }
+});
+
+const breadcrumbSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": `${SITE}/` },
+    { "@type": "ListItem", "position": 2, "name": "Servizi", "item": `${SITE}/#servizi` },
+    { "@type": "ListItem", "position": 3, "name": service.title, "item": canonicalUrl }
+  ]
+});
+
+const faqSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": content.faq.map(f => ({
+    "@type": "Question",
+    "name": f.q,
+    "acceptedAnswer": { "@type": "Answer", "text": f.a }
+  }))
+});
+---
+
+<LightLayout
+  title={service.metaTitle}
+  description={service.metaDescription}
+  canonical={canonicalUrl}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={schema} />
+    <script type="application/ld+json" set:html={breadcrumbSchema} />
+    <script type="application/ld+json" set:html={faqSchema} />
+  </Fragment>
+
+  <nav aria-label="Breadcrumb" class="ls-breadcrumb">
+    <a href={`${BASE}/`}>Home</a>
+    <span class="ls-breadcrumb-sep">/</span>
+    <a href={`${BASE}/servizi-e-citta/`}>Servizi</a>
+    <span class="ls-breadcrumb-sep">/</span>
+    <span class="ls-breadcrumb-current">{service.title}</span>
+  </nav>
+
+  <header class="ls-hero">
+    <span class="ls-eyebrow">Servizio · Modena & Reggio Emilia</span>
+    <h1 class="ls-title">{service.title}</h1>
+    <p class="ls-lede">
+      Servizi professionali in tutti i comuni di Modena e Reggio Emilia. Sopralluogo
+      e preventivo gratuiti, senza impegno.
+    </p>
+  </header>
+
+  <p>{content.intro}</p>
+
+  <h2>Cosa Offriamo</h2>
+  <ul>
+    {service.features.map((f) => <li>{f}</li>)}
+  </ul>
+
+  <h2>Come Lavoriamo</h2>
+  <p>Il nostro approccio garantisce trasparenza, qualità e rispetto delle tempistiche in ogni fase del lavoro:</p>
+  <ol style="list-style:none;padding:0;margin:0 0 1.5rem;counter-reset:step">
+    {content.process.map((step) => (
+      <li style="padding:0.6rem 0;border-bottom:1px solid rgba(200,169,110,0.15);color:#3d3530;font-size:0.9rem">
+        {step}
+      </li>
+    ))}
+  </ol>
+
+  <h2>Perché Scegliere Maestro Edil Carpi</h2>
+  <ul>
+    {content.benefits.map((b) => <li>{b}</li>)}
+  </ul>
+
+  <p>
+    Il nostro team di professionisti garantisce lavorazioni di alta qualità,
+    materiali certificati e finiture impeccabili. Con oltre 40 anni di esperienza nel settore edile,
+    interveniamo rapidamente in tutti i {citiesMO.length} comuni della provincia di Modena
+    e {citiesRE.length} comuni della provincia di Reggio Emilia.
+  </p>
+
+  <a href={`${BASE}/#contatti`} class="cta-btn">Richiedi Preventivo Gratuito per {service.title}</a>
+
+  <h2>Domande Frequenti su {service.title}</h2>
+  {content.faq.map((f) => (
+    <div style="margin-bottom:1.5rem">
+      <h3 style="font-size:1rem;color:#2c2824">{f.q}</h3>
+      <p style="font-size:0.9rem;color:#3d3530">{f.a}</p>
+    </div>
+  ))}
+
+  <h2>{service.title} in Tutte le Città</h2>
+  <p>Seleziona la tua città per scoprire i nostri servizi specifici:</p>
+
+  <h3>Provincia di Modena ({citiesMO.length} comuni)</h3>
+  <div class="city-grid">
+    {citiesMO.map((c) => (
+      <a href={`${BASE}/citta/${c.slug}/`}>{c.name} ({c.province})</a>
+    ))}
+  </div>
+
+  <h3>Provincia di Reggio Emilia ({citiesRE.length} comuni)</h3>
+  <div class="city-grid">
+    {citiesRE.map((c) => (
+      <a href={`${BASE}/citta/${c.slug}/`}>{c.name} ({c.province})</a>
+    ))}
+  </div>
+
+  <h2>Altri Servizi</h2>
+  {services.filter(s => s.slug !== service.slug).map((s) => (
+    <a href={`${BASE}/servizi/${s.slug}/`} class="service-link"><h3>{s.title} →</h3></a>
+  ))}
+
+  <h2>Contattaci per {service.title}</h2>
+  <p>
+    Per un preventivo gratuito per {service.title.toLowerCase()}, contattaci via WhatsApp al <strong>+39 331 202 1603</strong> oppure scrivi a
+    <strong>info@maestroedilcarpi.it</strong>.
+  </p>
+  <p>Sede operativa: Carpi (MO) 41012 — Interveniamo in tutti i comuni della provincia di Modena e Reggio Emilia.</p>
+</LightLayout>
+
+<style>
+  .ls-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Raleway', system-ui, sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #56626D;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+  }
+  .ls-breadcrumb a { color: #56626D; text-decoration: none; transition: color 0.2s; }
+  .ls-breadcrumb a:hover { color: #1A1A1A; }
+  .ls-breadcrumb-sep { color: #C5A880; }
+  .ls-breadcrumb-current { color: #1A1A1A; font-weight: 600; }
+
+  .ls-eyebrow {
+    display: inline-block;
+    font-family: 'Raleway', system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #C5A880;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #C5A880;
+  }
+
+  .ls-hero { margin-bottom: 3rem; max-width: 760px; }
+  .ls-title {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+    font-weight: 700;
+    color: #1A1A1A;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.25rem;
+  }
+  .ls-lede {
+    color: #56626D;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    max-width: 640px;
+  }
+</style>

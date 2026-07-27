@@ -1,0 +1,420 @@
+---
+// ── Organizzazione completa di Servizi e Città ──
+// Single Source of Truth: services.ts and cities.ts
+import LightLayout from '../layouts/LightLayout.astro';
+import { services } from '../data/services';
+import { cities } from '../data/cities';
+
+const BASE = '';
+const SITE = 'https://www.maestroedilcarpi.it';
+const canonicalUrl = `${SITE}${BASE}/servizi-e-citta/`;
+
+const citiesMO = cities.filter(c => c.province === 'MO');
+const citiesRE = cities.filter(c => c.province === 'RE');
+
+const faqSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Quali servizi edili offrite a Modena e Reggio Emilia?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Offriamo una gamma completa di servizi edili: pavimenti e rivestimenti, ristrutturazione completa, bagni e cucine, consulenza e progettazione, cartongesso e controsoffitti, tinteggiatura e finiture, piccoli lavori e manutenzione, costruzione nuovi edifici e restauro edifici storici."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "In quali città operate nelle province di Modena e Reggio Emilia?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Operiamo in tutti i comuni della provincia di Modena (oltre 40 comuni: Carpi, Modena, Sassuolo, Vignola, Mirandola, Formigine, ecc.) e in tutti i comuni della provincia di Reggio Emilia (oltre 30 comuni: Reggio Emilia, Scandiano, Casalgrande, Castellarano, Rubiera, Correggio, Guastalla, ecc.)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Come posso ottenere un preventivo per un lavoro edile?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Puoi contattarci via WhatsApp al +39 331 202 1603, via email a info@maestroedilcarpi.it, oppure compilando il modulo di contatto sul nostro sito. Offriamo preventivi gratuiti e senza impegno."
+      }
+    }
+  ]
+});
+---
+
+<LightLayout
+  title="Servizi e Città | Maestro Edil Carpi - Impresa Edile a Modena e Reggio Emilia"
+  description="Scopri tutti i servizi edili di Maestro Edil Carpi e le città dove operiamo nelle province di Modena e Reggio Emilia. Oltre 40 anni di esperienza."
+  canonical={canonicalUrl}
+  ogTitle="Servizi e Città | Maestro Edil Carpi"
+  ogDescription="Organizzazione completa di tutti i servizi edili e le città servite nelle province di Modena e Reggio Emilia."
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={faqSchema} />
+  </Fragment>
+
+  <!-- Breadcrumb -->
+  <nav aria-label="Breadcrumb" class="ls-breadcrumb">
+    <a href={`${BASE}/`}>Home</a>
+    <span class="ls-breadcrumb-sep">/</span>
+    <span class="ls-breadcrumb-current">Servizi & Città</span>
+  </nav>
+
+  <!-- Hero -->
+  <header class="ls-hero">
+    <span class="ls-eyebrow">Tutti i Servizi & Le Città</span>
+    <h1 class="ls-title">Servizi e Città</h1>
+    <p class="ls-lede">
+      Scopri tutti i servizi che offriamo e le città dove operiamo nelle province
+      di Modena e Reggio Emilia. Oltre 40 anni di esperienza al tuo servizio.
+    </p>
+  </header>
+
+  <!-- Intro -->
+  <section class="ls-intro">
+    <p>
+      <strong>Maestro Edil Carpi</strong> è un'impresa edile con sede a <strong>Carpi (MO)</strong>
+      che opera in tutta la provincia di <strong>Modena</strong> e in tutta la provincia di
+      <strong>Reggio Emilia</strong>. Con oltre 40 anni di esperienza, offriamo servizi completi
+      di edilizia, ristrutturazioni chiavi in mano, pavimenti e rivestimenti, bagni e cucine,
+      cartongesso, tinteggiatura, restauro e molto altro.
+    </p>
+  </section>
+
+  <!-- ── SERVIZI ── -->
+  <section class="ls-section">
+    <div class="ls-section-head">
+      <span class="ls-eyebrow">Le Nostre Specializzazioni</span>
+      <h2>Tutti i Nostri Servizi Edili</h2>
+      <p class="ls-section-lede">Esplora ogni servizio in dettaglio e scopri come possiamo realizzare il tuo progetto.</p>
+    </div>
+
+    <div class="ls-service-grid">
+      {services.map((s) => (
+        <a href={`${BASE}/servizi/${s.slug}/`} class="ls-service-card">
+          <div class="ls-service-card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h2M13 9h2M9 13h2M13 13h2M9 17h2M13 17h2"/>
+            </svg>
+          </div>
+          <h3>{s.title}</h3>
+          <p>{s.description.substring(0, 110)}…</p>
+          <span class="ls-service-card-cta">Scopri di più <span class="ls-arrow">→</span></span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- ── CITTÀ ── -->
+  <section class="ls-section">
+    <div class="ls-section-head">
+      <span class="ls-eyebrow">Copertura Territoriale</span>
+      <h2>Tutte le Città Dove Operiamo</h2>
+      <p class="ls-section-lede">Seleziona la tua città per scoprire i servizi specifici disponibili nella tua zona.</p>
+    </div>
+
+    <h3 class="ls-province-title">Provincia di Modena <span class="ls-province-count">({citiesMO.length} comuni)</span></h3>
+    <div class="city-grid">
+      {citiesMO.map((c) => (
+        <a href={`${BASE}/citta/${c.slug}/`}>{c.name}</a>
+      ))}
+    </div>
+
+    <h3 class="ls-province-title">Provincia di Reggio Emilia <span class="ls-province-count">({citiesRE.length} comuni)</span></h3>
+    <div class="city-grid">
+      {citiesRE.map((c) => (
+        <a href={`${BASE}/citta/${c.slug}/`}>{c.name}</a>
+      ))}
+    </div>
+  </section>
+
+  <!-- ── STATS ── -->
+  <section class="ls-section">
+    <div class="ls-section-head">
+      <span class="ls-eyebrow">I Numeri</span>
+      <h2>Copertura Territoriale</h2>
+    </div>
+    <div class="ls-stats">
+      <div class="ls-stat">
+        <div class="ls-stat-number">{services.length}</div>
+        <div class="ls-stat-label">Servizi Offerti</div>
+      </div>
+      <div class="ls-stat">
+        <div class="ls-stat-number">{cities.length}</div>
+        <div class="ls-stat-label">Comuni Serviti</div>
+      </div>
+      <div class="ls-stat">
+        <div class="ls-stat-number">2</div>
+        <div class="ls-stat-label">Province Coperte</div>
+      </div>
+      <div class="ls-stat">
+        <div class="ls-stat-number">40+</div>
+        <div class="ls-stat-label">Anni di Esperienza</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ── -->
+  <section class="ls-cta">
+    <div class="ls-cta-inner">
+      <span class="ls-eyebrow ls-eyebrow-light">Iniziamo Insieme</span>
+      <h2>Hai bisogno di un preventivo?</h2>
+      <p>Contattaci per una consulenza gratuita e senza impegno. Siamo a tua disposizione.</p>
+      <a href={`${BASE}/#contatti`} class="cta-btn">Richiedi Preventivo Gratuito</a>
+    </div>
+  </section>
+</LightLayout>
+
+<style>
+  /* ============== Breadcrumb ============== */
+  .ls-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Raleway', system-ui, sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #56626D;
+    margin-bottom: 2.5rem;
+  }
+  .ls-breadcrumb a { color: #56626D; text-decoration: none; transition: color 0.2s; }
+  .ls-breadcrumb a:hover { color: #1A1A1A; }
+  .ls-breadcrumb-sep { color: #C5A880; }
+  .ls-breadcrumb-current { color: #1A1A1A; font-weight: 600; }
+
+  /* ============== Eyebrow ============== */
+  .ls-eyebrow {
+    display: inline-block;
+    font-family: 'Raleway', system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #C5A880;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #C5A880;
+  }
+  .ls-eyebrow-light {
+    color: #C5A880;
+    border-bottom-color: rgba(197, 168, 128, 0.4);
+  }
+
+  /* ============== Hero ============== */
+  .ls-hero {
+    margin-bottom: 3.5rem;
+    max-width: 760px;
+  }
+  .ls-title {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    font-weight: 700;
+    color: #1A1A1A;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    margin-bottom: 1.5rem;
+  }
+  .ls-lede {
+    color: #56626D;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    max-width: 640px;
+  }
+
+  /* ============== Intro ============== */
+  .ls-intro {
+    margin-bottom: 4.5rem;
+    padding: 2rem 2.25rem;
+    background: #FFFFFF;
+    border-left: 3px solid #C5A880;
+    border-radius: 4px;
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.04);
+  }
+  .ls-intro p {
+    margin: 0;
+    color: #1A1A1A;
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+  .ls-intro strong { color: #1A1A1A; font-weight: 600; }
+
+  /* ============== Section ============== */
+  .ls-section {
+    margin-bottom: 5rem;
+  }
+  .ls-section-head {
+    margin-bottom: 2.5rem;
+    max-width: 700px;
+  }
+  .ls-section-head h2 {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+    font-weight: 700;
+    color: #1A1A1A;
+    line-height: 1.15;
+    margin: 0 0 0.85rem;
+  }
+  .ls-section-lede {
+    color: #56626D;
+    font-size: 1rem;
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  .ls-province-title {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: #1A1A1A;
+    margin: 2.5rem 0 1.25rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+  }
+  .ls-province-count {
+    font-family: 'Raleway', system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #C5A880;
+  }
+
+  /* ============== Service Grid ============== */
+  .ls-service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.25rem;
+  }
+  .ls-service-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1.75rem;
+    background: #FFFFFF;
+    border: 1px solid rgba(26, 26, 26, 0.06);
+    border-radius: 6px;
+    text-decoration: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.25s;
+    position: relative;
+  }
+  .ls-service-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+    border-color: rgba(197, 168, 128, 0.4);
+  }
+  .ls-service-card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 4px;
+    background: rgba(197, 168, 128, 0.1);
+    color: #C5A880;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+  }
+  .ls-service-card h3 {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1A1A1A;
+    margin: 0 0 0.6rem;
+    line-height: 1.3;
+  }
+  .ls-service-card p {
+    color: #56626D;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 0 0 1.5rem;
+    flex: 1;
+  }
+  .ls-service-card-cta {
+    font-family: 'Raleway', system-ui, sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #1A1A1A;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-top: 1.1rem;
+    border-top: 1px solid rgba(26, 26, 26, 0.08);
+  }
+  .ls-arrow {
+    display: inline-block;
+    color: #C5A880;
+    transition: transform 0.3s;
+  }
+  .ls-service-card:hover .ls-arrow { transform: translateX(5px); }
+
+  /* ============== Stats ============== */
+  .ls-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+  .ls-stat {
+    background: #FFFFFF;
+    border: 1px solid rgba(26, 26, 26, 0.06);
+    border-top: 2px solid #C5A880;
+    border-radius: 4px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .ls-stat:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  }
+  .ls-stat-number {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 3rem;
+    font-weight: 700;
+    color: #1A1A1A;
+    line-height: 1;
+    margin-bottom: 0.6rem;
+    letter-spacing: -0.02em;
+  }
+  .ls-stat-label {
+    font-family: 'Raleway', system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #56626D;
+  }
+
+  /* ============== CTA ============== */
+  .ls-cta {
+    background: #1A1A1A;
+    border-radius: 8px;
+    padding: 4rem 2rem;
+    text-align: center;
+    box-shadow: 0 12px 40px rgba(26, 26, 26, 0.1);
+    margin: 1rem 0;
+  }
+  .ls-cta-inner {
+    max-width: 580px;
+    margin: 0 auto;
+  }
+  .ls-cta h2 {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0 0 0.85rem;
+    line-height: 1.15;
+  }
+  .ls-cta p {
+    color: #C5A880;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin: 0 0 2rem;
+  }
+</style>

@@ -1,0 +1,48 @@
+---
+const BASE = '';
+const currentYear = new Date().getFullYear();
+---
+
+<footer style="border-top:1px solid rgba(200,169,110,.1);padding:3.5rem 0;text-align:center;margin-top:3rem" role="contentinfo">
+  <div style="max-width:80rem;margin:0 auto;padding:0 1.5rem">
+    <!-- Logo -->
+    <div style="display:flex;align-items:center;justify-content:center;gap:.75rem;margin-bottom:1rem">
+      <div>
+        <div style="font-family:'Raleway',system-ui,sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#ede9df;line-height:1.2">
+          Maestro Edil Carpi
+        </div>
+      </div>
+    </div>
+
+    <!-- Service Links -->
+    <div style="display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap;margin-bottom:2rem">
+      <a href={`${BASE}/servizi/pavimenti-e-rivestimenti/`} style="font-family:'Raleway',system-ui,sans-serif;font-size:11px;font-weight:300;color:#d3c6af;text-decoration:none;transition:color .2s">Pavimenti</a>
+      <a href={`${BASE}/servizi/ristrutturazione-completa/`} style="font-family:'Raleway',system-ui,sans-serif;font-size:11px;font-weight:300;color:#d3c6af;text-decoration:none;transition:color .2s">Ristrutturazioni</a>
+      <a href={`${BASE}/servizi/bagni-e-cucine/`} style="font-family:'Raleway',system-ui,sans-serif;font-size:11px;font-weight:300;color:#d3c6af;text-decoration:none;transition:color .2s">Bagni e Cucine</a>
+      <a href={`${BASE}/servizi/cartongesso-e-controsoffitti/`} style="font-family:'Raleway',system-ui,sans-serif;font-size:11px;font-weight:300;color:#d3c6af;text-decoration:none;transition:color .2s">Cartongesso</a>
+      <a href={`${BASE}/servizi/tinteggiatura-e-finiture/`} style="font-family:'Raleway',system-ui,sans-serif;font-size:11px;font-weight:300;color:#d3c6af;text-decoration:none;transition:color .2s">Tinteggiatura</a>
+      <a href={`${BASE}/servizi/restauro-edifici-storici/`} style="font-family:'Raleway',system-ui,sans-serif;font-size:11px;font-weight:300;color:#d3c6af;text-decoration:none;transition:color .2s">Restauro</a>
+    </div>
+
+    <!-- Contact -->
+    <div style="display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;margin-bottom:1.5rem">
+      <a href="tel:+393755428696" style="font-family:'Raleway',system-ui,sans-serif;font-size:11px;font-weight:300;color:#d3c6af;text-decoration:none">+39 375 542 8696</a>
+      <a href="mailto:info@maestroedilcarpi.it" style="font-family:'Raleway',system-ui,sans-serif;font-size:11px;font-weight:300;color:#d3c6af;text-decoration:none">info@maestroedilcarpi.it</a>
+      <span style="font-family:'Raleway',system-ui,sans-serif;font-size:11px;font-weight:300;color:#d3c6af">Carpi, MO 41012</span>
+    </div>
+
+    <!-- Legal Links -->
+    <nav style="display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap;margin-bottom:1.5rem" aria-label="Link legali">
+      <a href={`${BASE}/privacy-policy/`} style="font-family:'Raleway',system-ui,sans-serif;font-size:12px;font-weight:300;color:#d3c6af;text-decoration:none;transition:color .2s">Privacy Policy</a>
+      <a href={`${BASE}/cookie-policy/`} style="font-family:'Raleway',system-ui,sans-serif;font-size:12px;font-weight:300;color:#d3c6af;text-decoration:none;transition:color .2s">Cookie Policy</a>
+      <a href={`${BASE}/`} style="font-family:'Raleway',system-ui,sans-serif;font-size:12px;font-weight:300;color:#d3c6af;text-decoration:none;transition:color .2s">Home</a>
+    </nav>
+
+    <p style="font-family:'Raleway',system-ui,sans-serif;font-size:12px;font-weight:300;color:#d3c6af">
+      &copy; {currentYear} Maestro Edil Carpi S.r.l. &middot; P.IVA 01234567890 &middot; Tutti i diritti riservati
+    </p>
+    <p style="font-family:'Raleway',system-ui,sans-serif;font-size:11px;font-weight:400;color:#d3c6af;margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(200,169,110,.05)">
+      Website by <a href="https://rayman.studio" target="_blank" rel="noopener noreferrer" style="color:#c8a96e;text-decoration:none">rayman.studio</a>
+    </p>
+  </div>
+</footer>

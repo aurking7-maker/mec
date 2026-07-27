@@ -1,0 +1,148 @@
+---
+// Shared Navbar + Footer for static SEO pages
+const BASE = '';
+const SERIF = "'EB Garamond', Georgia, serif";
+const SANS = "'Raleway', system-ui, sans-serif";
+const GOLD = '#c8a96e';
+
+interface Props {
+  pageTitle?: string;
+}
+
+const { pageTitle } = Astro.props;
+---
+
+<!-- Preconnect for fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&family=Raleway:wght@300;400;500;600;700&display=swap" as="style" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&family=Raleway:wght@300;400;500;600;700&display=swap" media="print" onload="this.media='all'" />
+<link rel="icon" type="image/svg+xml" href={`${BASE}/favicon.svg`} />
+<link rel="icon" href={`${BASE}/favicon.ico`} sizes="any" />
+<meta name="theme-color" content="#0c0b09" />
+
+<style>
+  /* Reset */
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background:#0c0b09;color:#ede9df;
+    font-family:'Raleway',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;line-height:1.7;font-size:18px;
+    display:flex;flex-direction:column;min-height:100vh;
+  }
+  main{flex:1}
+
+  /* Navbar */
+  .seo-nav{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    background:rgba(20,18,16,0.92);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid rgba(200,169,110,0.13);
+  }
+  .seo-nav-inner{
+    max-width:80rem;margin:0 auto;
+    padding:0 1.5rem;display:flex;
+    align-items:center;justify-content:space-between;
+    height:4.5rem;
+  }
+  .logo{display:flex;align-items:center;gap:.75rem;text-decoration:none}
+  .logo-text{font-family:'Raleway',system-ui,sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#ede9df;line-height:1.2}
+  .logo-sub{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:#c8a96e;font-weight:300;line-height:1.2}
+  .nav-links{display:flex;align-items:center;gap:2rem;list-style:none}
+  .nav-links a{
+    font-family:'Raleway',system-ui,sans-serif;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:#d3c6af;text-decoration:none;transition:color .2s;
+  }
+  .nav-links a:hover{color:#ede9df}
+  .nav-cta{
+    padding:.625rem 1.25rem;border:1px solid #c8a96e;color:#c8a96e;
+    font-family:'Raleway',system-ui,sans-serif;font-size:10px;letter-spacing:.25em;
+    text-transform:uppercase;text-decoration:none;transition:all .3s;
+  }
+  .nav-cta:hover{background:#c8a96e;color:#0c0b09}
+
+  /* Footer */
+  .seo-footer{border-top:1px solid rgba(200,169,110,.1);padding:3.5rem 0;text-align:center;margin-top:3rem}
+  .seo-footer-links{margin-top:.75rem;display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap}
+  .seo-footer-links a{
+    font-family:'Raleway',system-ui,sans-serif;font-size:12px;font-weight:300;
+    color:#d3c6af;text-decoration:none;transition:color .2s;
+  }
+  .seo-footer-links a:hover{color:#c8a96e}
+  .seo-footer-copy{
+    font-family:'Raleway',system-ui,sans-serif;font-size:12px;font-weight:300;
+    color:#d3c6af;margin-top:1.5rem;
+  }
+  .seo-footer-credit{
+    font-family:'Raleway',system-ui,sans-serif;font-size:11px;font-weight:400;
+    color:#d3c6af;margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(200,169,110,.05);
+  }
+  .seo-footer-credit a{color:#c8a96e;text-decoration:none}
+
+  /* Content */
+  .content-wrap{max-width:900px;margin:0 auto;padding:2rem 1.5rem;padding-top:8rem}
+  h1{font-family:'EB Garamond',Georgia,serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:600;margin-bottom:1rem;line-height:1.15}
+  h2{font-family:'EB Garamond',Georgia,serif;font-size:clamp(1.4rem,3vw,2rem);font-weight:600;margin:2.5rem 0 1rem;color:#c8a96e}
+  p{margin-bottom:1.2rem;color:#d3c6af;font-size:.95rem}
+  strong{color:#ede9df}
+  ul{list-style:none;padding:0;margin:0 0 1.5rem}
+  ul li{padding:.5rem 0;border-bottom:1px solid rgba(200,169,110,.1);color:#d3c6af;font-size:.9rem}
+  ul li::before{content:'✓ ';color:#c8a96e;font-weight:700}
+  .breadcrumb{font-size:.8rem;color:#d3c6af;padding-top:5.5rem;max-width:900px;margin:0 auto;padding-left:1.5rem;padding-right:1.5rem}
+  .breadcrumb a{color:#c8a96e;text-decoration:none}
+  .cta-btn{
+    display:inline-block;padding:1rem 2rem;background:#c8a96e;color:#0c0b09;
+    font-family:'Raleway',system-ui,sans-serif;font-size:.75rem;letter-spacing:.2em;
+    text-transform:uppercase;border:none;cursor:pointer;transition:opacity .3s;
+    text-decoration:none;margin-top:1rem;
+  }
+  .cta-btn:hover{opacity:.85}
+  .nearby{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.5rem}
+  .nearby a{
+    display:inline-block;padding:.4rem .8rem;border:1px solid rgba(200,169,110,.2);
+    font-size:.8rem;color:#d3c6af;transition:all .2s;text-decoration:none;
+  }
+  .nearby a:hover{border-color:#c8a96e;color:#c8a96e}
+  .service-link{
+    display:block;padding:1.2rem;border:1px solid rgba(200,169,110,.1);
+    margin-bottom:.8rem;transition:all .2s;text-decoration:none;
+  }
+  .service-link:hover{border-color:rgba(200,169,110,.3);background:rgba(20,18,16,.5)}
+  .service-link h3{font-family:'EB Garamond',Georgia,serif;font-size:1.1rem;margin:0;color:#ede9df}
+  .city-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.6rem;margin:1.5rem 0}
+  .city-grid a{
+    display:block;padding:1rem;border:1px solid rgba(200,169,110,.1);
+    transition:all .2s;font-size:.85rem;color:#d3c6af;text-decoration:none;
+  }
+  .city-grid a:hover{border-color:rgba(200,169,110,.3);color:#c8a96e;background:rgba(20,18,16,.5)}
+
+  @media (max-width:768px){
+    .nav-links{display:none}
+    .nav-cta{display:none}
+    .seo-nav-inner{height:3.5rem}
+    .content-wrap{padding-top:5rem}
+    .breadcrumb{padding-top:4rem}
+  }
+</style>
+
+<!-- Navbar -->
+<header class="seo-nav" role="banner">
+  <nav class="seo-nav-inner" aria-label="Navigazione principale">
+    <a href={`${BASE}/`} class="logo" aria-label="Torna alla home Maestro Edil Carpi">
+      <div>
+        <div class="logo-text">Maestro Edil</div>
+        <div class="logo-sub">Carpi</div>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href={`${BASE}/`}>Home</a></li>
+      <li><a href={`${BASE}/#chi-siamo`}>Chi Siamo</a></li>
+      <li><a href={`${BASE}/#servizi`}>Servizi</a></li>
+      <li><a href={`${BASE}/#opere`}>Opere</a></li>
+      <li><a href={`${BASE}/#contatti`}>Contatti</a></li>
+    </ul>
+    <a href={`${BASE}/#contatti`} class="nav-cta">Preventivo</a>
+  </nav>
+</header>
+
+<!-- Footer (injected via slot or rendered in page) -->

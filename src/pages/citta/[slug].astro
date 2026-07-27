@@ -1,0 +1,216 @@
+---
+import LightLayout from '../../layouts/LightLayout.astro';
+import { cities, type City } from '../../data/cities';
+import { services } from '../../data/services';
+
+export async function getStaticPaths() {
+  return cities.map((city) => ({
+    params: { slug: city.slug },
+    props: { city },
+  }));
+}
+
+const { city } = Astro.props as { city: City };
+
+const BASE = '';
+const SITE = 'https://www.maestroedilcarpi.it';
+const canonicalUrl = `${SITE}${BASE}/citta/${city.slug}/`;
+const provinceName = city.province === 'MO' ? 'Modena' : 'Reggio Emilia';
+
+const nearbyCityLinks = city.nearbyCities.map((name) => {
+  const found = cities.find((c) => c.name === name);
+  return { name, slug: found?.slug || '' };
+});
+
+// All services formatted for city page
+const allServiceLinks = services.map((s) => ({
+  name: s.title,
+  slug: s.slug,
+  description: s.description.substring(0, 100) + '...',
+}));
+
+const schema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": `Impresa Edile a ${city.name}`,
+  "provider": { "@type": "LocalBusiness", "name": "Maestro Edil Carpi", "url": `${SITE}${BASE}/`, "telephone": "+39 331 202 1603" },
+  "areaServed": { "@type": "City", "name": city.name, "containedInPlace": { "@type": "AdministrativeArea", "name": `Provincia di ${provinceName}` } },
+  "description": `Servizi edili professionali a ${city.name}: ristrutturazioni, pavimenti, bagni, cucine, cartongesso, tinteggiatura e restauro.`,
+  "providerMobility": "Static",
+  "availableChannel": { "@type": "ServiceChannel", "serviceUrl": canonicalUrl, "availableLanguage": "Italiano" }
+});
+
+const breadcrumbSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": `${SITE}/` },
+    { "@type": "ListItem", "position": 2, "name": "Città", "item": `${SITE}/#servizi` },
+    { "@type": "ListItem", "position": 3, "name": city.name, "item": canonicalUrl }
+  ]
+});
+
+const faqSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": `Come posso contattare un'impresa edile a ${city.name}?`,
+      "acceptedAnswer": { "@type": "Answer", "text": `Contattaci al +39 331 202 1603 (WhatsApp e telefono) o scrivi a info@maestroedilcarpi.it per un preventivo gratuito a ${city.name}. Offriamo sopralluoghi gratuiti e preventivi dettagliati.` }
+    },
+    {
+      "@type": "Question",
+      "name": `Che servizi offrite a ${city.name}?`,
+      "acceptedAnswer": { "@type": "Answer", "text": `A ${city.name} offriamo: ristrutturazioni complete chiavi in mano, pavimenti e rivestimenti, ristrutturazione bagni e cucine, cartongesso e controsoffitti, tinteggiatura e finiture, costruzione nuovi edifici, restauro edifici storici, e piccoli lavori di manutenzione.` }
+    },
+    {
+      "@type": "Question",
+      "name": `Quanto costa una ristrutturazione a ${city.name}?`,
+      "acceptedAnswer": { "@type": "Answer", "text": `I costi variano in base alla tipologia e dimensione dei lavori. Offriamo preventivi gratuiti e personalizzati. Contattaci per una consulenza tecnica senza impegno a ${city.name}.` }
+    }
+  ]
+});
+---
+
+<LightLayout
+  title={`Impresa Edile a ${city.name} (${city.province}) - Ristrutturazioni e Costruzioni | Maestro Edil Carpi`}
+  description={`Maestro Edil Carpi: impresa edile a ${city.name} (${provinceName}). Ristrutturazioni complete, pavimenti, bagni, cucine, cartongesso, tinteggiatura e restauro. Preventivo gratuito!`}
+  canonical={canonicalUrl}
+  ogTitle={`Impresa Edile a ${city.name} - Maestro Edil Carpi`}
+  ogDescription={`Servizi edili professionali a ${city.name} (${provinceName}): ristrutturazioni, pavimenti, bagni, cucine e restauro. Preventivo gratuito!`}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={schema} />
+    <script type="application/ld+json" set:html={breadcrumbSchema} />
+    <script type="application/ld+json" set:html={faqSchema} />
+  </Fragment>
+
+  <nav aria-label="Breadcrumb" class="ls-breadcrumb">
+    <a href={`${BASE}/`}>Home</a>
+    <span class="ls-breadcrumb-sep">/</span>
+    <span class="ls-breadcrumb-current">{city.name}</span>
+  </nav>
+
+  <header class="ls-hero">
+    <span class="ls-eyebrow">Impresa Edile · {provinceName}</span>
+    <h1 class="ls-title">Impresa Edile a {city.name}</h1>
+    <p class="ls-lede">
+      Ristrutturazioni, costruzioni e restauro a {city.name} e in tutta la provincia di {provinceName}.
+    </p>
+  </header>
+
+  <p class="ls-intro-callout">{city.description}</p>
+
+  <h2>Servizi Edili a {city.name}</h2>
+  <p>Come impresa edile a {city.name}, offriamo una gamma completa di servizi per privati e aziende:</p>
+  <ul>
+    {city.highlights.map((h) => <li>{h}</li>)}
+  </ul>
+
+  <p>
+    Che si tratti di ristrutturare un appartamento nel centro di {city.name}, costruire una nuova villa nelle zone residenziali,
+    o recuperare un edificio storico, il nostro team di professionisti è pronto a realizzare il tuo progetto con cura
+    artigianale e materiali di prima qualità.
+  </p>
+
+  <h2>Perché Scegliere Maestro Edil Carpi a {city.name}</h2>
+  <p>
+    Da oltre 40 anni operiamo nel territorio tra Modena e Reggio Emilia, con una solida reputazione fondata sulla
+    qualità dei lavori, la trasparenza nei preventivi e il rispetto delle tempistiche. Interveniamo rapidamente a
+    {city.name} e nei comuni limitrofi, garantendo un servizio professionale e puntuale.
+  </p>
+  <p>Offriamo <strong>preventivi gratuiti e senza impegno</strong> per ogni tipo di intervento edile a {city.name}.</p>
+
+  <a href={`${BASE}/#contatti`} class="cta-btn">Richiedi Preventivo Gratuito a {city.name}</a>
+
+  <h2>Tutti i Nostri Servizi a {city.name}</h2>
+  {allServiceLinks.map((s) => (
+    <a href={`${BASE}/servizi/${s.slug}/`} class="service-link">
+      <h3>{s.name} →</h3>
+      <p style="font-size:0.85rem;color:#4a4642;margin-top:0.3rem">{s.description}</p>
+    </a>
+  ))}
+
+  <h2>Città Vicine a {city.name}</h2>
+  <p>Operiamo anche nelle città limitrofe a {city.name}:</p>
+  <div class="nearby">
+    {nearbyCityLinks.map((c) => c.slug ? <a href={`${BASE}/citta/${c.slug}/`}>{c.name}</a> : null)}
+  </div>
+
+  <h2>Tutte le Città in Provincia di {provinceName}</h2>
+  <p>Maestro Edil Carpi opera in tutti i comuni della provincia di {provinceName}. {city.name} è una delle città che serviamo con i nostri servizi edili professionali.</p>
+  <div class="city-grid">
+    {cities.filter(c => c.province === city.province).map(c => (
+      <a href={`${BASE}/citta/${c.slug}/`}>{c.name}</a>
+    ))}
+  </div>
+
+  <h2>Contattaci da {city.name}</h2>
+  <p>
+    Per un preventivo gratuito o per ricevere maggiori informazioni sui nostri servizi a {city.name},
+    contattaci via WhatsApp al <strong>+39 331 202 1603</strong> oppure scrivi a
+    <strong>info@maestroedilcarpi.it</strong>.
+  </p>
+  <p>Interveniamo rapidamente su {city.name} e in tutta la provincia di {provinceName}.</p>
+</LightLayout>
+
+<style>
+  .ls-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Raleway', system-ui, sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #56626D;
+    margin-bottom: 2.5rem;
+  }
+  .ls-breadcrumb a { color: #56626D; text-decoration: none; transition: color 0.2s; }
+  .ls-breadcrumb a:hover { color: #1A1A1A; }
+  .ls-breadcrumb-sep { color: #C5A880; }
+  .ls-breadcrumb-current { color: #1A1A1A; font-weight: 600; }
+
+  .ls-eyebrow {
+    display: inline-block;
+    font-family: 'Raleway', system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #C5A880;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #C5A880;
+  }
+
+  .ls-hero { margin-bottom: 3rem; max-width: 760px; }
+  .ls-title {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+    font-weight: 700;
+    color: #1A1A1A;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.25rem;
+  }
+  .ls-lede {
+    color: #56626D;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    max-width: 640px;
+  }
+
+  .ls-intro-callout {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: #1A1A1A;
+    background: #FFFFFF;
+    padding: 1.75rem 2rem;
+    border-left: 3px solid #C5A880;
+    border-radius: 4px;
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.04);
+    margin-bottom: 2.5rem;
+  }
+</style>

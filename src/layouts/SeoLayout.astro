@@ -1,0 +1,193 @@
+---
+import '../styles/global.css';
+import { NavbarFooter } from '../components/App.tsx';
+
+interface Props {
+  title: string;
+  description: string;
+  canonical: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  noindex?: boolean;
+}
+
+const { title, description, canonical, ogTitle, ogDescription, noindex } = Astro.props;
+const SERIF = "'EB Garamond', Georgia, serif";
+const SANS = "'Raleway', system-ui, sans-serif";
+const GOLD = '#c8a96e';
+---
+
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content={noindex ? "noindex, follow" : "index, follow, max-image-preview:large, max-snippet:-1"} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={ogTitle || title} />
+    <meta property="og:description" content={ogDescription || description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="it_IT" />
+    <meta property="og:site_name" content="Maestro Edil Carpi" />
+    <meta name="theme-color" content="#0c0b09" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="alternate" hreflang="it" href={canonical} />
+    <link rel="alternate" hreflang="x-default" href={canonical} />
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8MDEGEXRN3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-8MDEGEXRN3');
+    </script>
+
+    <slot name="head" />
+  </head>
+  <body class="bg-background text-foreground antialiased">
+    <NavbarFooter client:visible>
+      <div class="breadcrumb-wrap">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/">Home</a> <slot name="breadcrumb-extra" />
+        </nav>
+      </div>
+
+      <main class="seo-content">
+        <slot />
+      </main>
+    </NavbarFooter>
+
+    <style is:global>
+      *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+      body{background:#0c0b09;color:#ede9df;font-family:'Raleway',system-ui,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.7}
+
+      .breadcrumb-wrap{
+        padding-top:6rem;
+        max-width:80rem;
+        margin:0 auto;
+        padding-left:1.5rem;
+        padding-right:1.5rem;
+      }
+      .breadcrumb{
+        font-size:.8rem;
+        color:#d3c6af;
+      }
+      .breadcrumb a{
+        color:#c8a96e;
+        text-decoration:none;
+      }
+
+      .seo-content{
+        max-width:80rem;
+        margin:0 auto;
+        padding:2rem 1.5rem 4rem;
+      }
+
+      .seo-content h1{
+        font-family:'EB Garamond',Georgia,serif;
+        font-size:clamp(2rem,5vw,3.2rem);
+        font-weight:600;
+        margin-bottom:1rem;
+        line-height:1.15;
+        color:#ede9df;
+      }
+      .seo-content h2{
+        font-family:'EB Garamond',Georgia,serif;
+        font-size:clamp(1.4rem,3vw,2rem);
+        font-weight:600;
+        margin:2.5rem 0 1rem;
+        color:#c8a96e;
+      }
+      .seo-content h3{
+        font-family:'EB Garamond',Georgia,serif;
+        font-size:1.2rem;
+        font-weight:600;
+        margin:1.5rem 0 .5rem;
+        color:#ede9df;
+      }
+      .seo-content p{
+        margin-bottom:1.2rem;
+        color:#d3c6af;
+        font-size:.95rem;
+      }
+      .seo-content strong{color:#ede9df}
+      .seo-content ul{
+        list-style:none;
+        padding:0;
+        margin:0 0 1.5rem;
+      }
+      .seo-content ul li{
+        padding:.5rem 0;
+        border-bottom:1px solid rgba(200,169,110,.1);
+        color:#d3c6af;
+        font-size:.9rem;
+      }
+      .seo-content ul li::before{content:'✓ ';color:#c8a96e;font-weight:700}
+
+      .seo-content .cta-btn{
+        display:inline-block;
+        padding:1rem 2rem;
+        background:#c8a96e;
+        color:#0c0b09;
+        font-family:'Raleway',system-ui,sans-serif;
+        font-size:.75rem;
+        letter-spacing:.2em;
+        text-transform:uppercase;
+        text-decoration:none;
+        transition:opacity .3s;
+        margin-top:1rem;
+      }
+      .seo-content .cta-btn:hover{opacity:.85}
+
+      .seo-content .nearby{
+        display:flex;
+        flex-wrap:wrap;
+        gap:.5rem;
+        margin-top:1.5rem;
+      }
+      .seo-content .nearby a{
+        display:inline-block;
+        padding:.4rem .8rem;
+        border:1px solid rgba(200,169,110,.2);
+        font-size:.8rem;
+        color:#d3c6af;
+        text-decoration:none;
+        transition:all .2s;
+      }
+      .seo-content .nearby a:hover{border-color:#c8a96e;color:#c8a96e}
+
+      .seo-content .service-link{
+        display:block;
+        padding:1.2rem;
+        border:1px solid rgba(200,169,110,.1);
+        margin-bottom:.8rem;
+        transition:all .2s;
+        text-decoration:none;
+      }
+      .seo-content .service-link:hover{border-color:rgba(200,169,110,.3);background:rgba(20,18,16,.5)}
+      .seo-content .service-link h3{font-size:1.1rem;margin:0;color:#ede9df}
+
+      .seo-content .city-grid{
+        display:grid;
+        grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+        gap:.6rem;
+        margin:1.5rem 0;
+      }
+      .seo-content .city-grid a{
+        display:block;
+        padding:1rem;
+        border:1px solid rgba(200,169,110,.1);
+        transition:all .2s;
+        font-size:.85rem;
+        color:#d3c6af;
+        text-decoration:none;
+      }
+      .seo-content .city-grid a:hover{border-color:rgba(200,169,110,.3);color:#c8a96e;background:rgba(20,18,16,.5)}
+    </style>
+  </body>
+</html>
