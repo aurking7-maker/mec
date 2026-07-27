@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /vuad/
+Disallow: /_astro/
+
+Sitemap: https://www.maestroedilcarpi.it/sitemap-index.xml
+
+# Maestro Edil Carpi — Impresa Edile
+# Carpi · Modena · Reggio Emilia

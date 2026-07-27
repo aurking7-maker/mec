@@ -1,0 +1,15 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="30" y="30" width="452" height="452" rx="70" stroke="#C5A368" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+<g stroke="#C5A368" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
+<path d="M140 200V370" />
+<path d="M180 200V370" />
+<path d="M332 200V370" />
+<path d="M372 200V370" />
+<path d="M140 240H372" />
+<path d="M140 200L256 120" />
+<path d="M372 200L256 120" />
+<path d="M180 200V170" />
+<path d="M332 200V170" />
+</g>
+<polygon points="256,82 268,100 256,118 244,100" fill="#C5A368"/>
+</svg>
